@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		answerItem.innerHTML = `
         <div class="answers-item d-flex flex-column">
-          <input type="radio" id="$[answer.title]" name="answer" class="d-none">
-          <label for="$[answer.title]" class="d-flex flex-column justify-content-between">
-            <img class="answerImg" src="$[answer.url]" alt="burger">
-            <span>$[answer.title]</span>
+          <input type="radio" id="${answer.title}" name="answer" class="d-none">
+	  <label for="${answer.title}" class="d-flex flex-column justify-content-between">
+            <img class="answerImg" src="${answer.url}" alt="burger">
+	  <span>${answer.title}</span>
           </label>
         </div>
       `;
@@ -115,20 +115,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const renderQuestion = (indexQuestion) => {
 		formAnswers.innerHTML = '';
 		
-		questionTitle.textContent = '${question[indexQuestion].question}';
+		questionTitle.textContent = `${questions[indexQuestion].question}`;
 		
 		renderAnswers(indexQuestion);
 	}
 	renderQuestion(numberQuestion);
 	
 	nextButton.onclick = () => {
-		numberQuestion++;
-		renderQuestion(numberQuestion);
+		if (numberQuestion < questions.length - 1) {
+			numberQuestion++;
+			renderQuestion(numberQuestion);
+		}
 	}
 	
 	prevButton.onclick = () => {
-		numberQuestion--;
-		renderQuestion(numberQuestion);
+		if (numberQuestion > 0) {
+			numberQuestion--;
+			renderQuestion(numberQuestion);
+		}
 	}
   };
 });
