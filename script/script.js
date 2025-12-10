@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+  
   const btnOpenModal = document.querySelector('#btnOpenModal');
   const modalBlock = document.querySelector('#modalBlock');
   const closeModal = document.querySelector('#closeModal');
@@ -8,84 +9,30 @@ document.addEventListener('DOMContentLoaded', function() {
   const prevButton = document.querySelector('#prev');
   const sendButton = document.querySelector('#send');
   
-  const questions = [
-    {
-        question: "Якого кольору бургер?",
-        answers: [
-            {
-                title: 'Стандарт',
-                url: './image/burger.png'
-            },
-            {
-                title: 'Чорний',
-                url: './image/burgerBlack.png'
-            }
-        ],
-        type: 'radio'
-    },
-    {
-        question: "З якого м'яса котлета?",
-        answers: [
-            {
-                title: 'Курка',
-                url: './image/chickenMeat.png'
-            },
-            {
-                title: 'Яловичина',
-                url: './image/beefMeat.png'
-            },
-            {
-                title: 'Свинина',
-                url: './image/porkMeat.png'
-            }
-        ],
-        type: 'radio'
-    },
-    {
-        question: "Додаткові інгредієнти ?",
-        answers: [
-            {
-                title: 'Помідор',
-                url: './image/tomato.png'
-            },
-            {
-                title: 'Огірок',
-                url: './image/cucumber.png'
-            },
-            {
-                title: 'Салат',
-                url: './image/salad.png'
-            },
-            {
-                title: 'Цибуля',
-                url: './image/onion.png'
-            }
-        ],
-        type: 'checkbox'
-    },
-    {
-        question: "Додати соус?",
-        answers: [
-            {
-                title: 'Часниковий',
-                url: './image/sauce1.png'
-            },
-            {
-                title: 'Томатний',
-                url: './image/sauce2.png'
-            },
-            {
-                title: 'Гірчичний',
-                url: './image/sauce3.png'
-            }
-        ],
-        type: 'radio'
-    }
-];
+  const firebaseConfig = {
+	apiKey: "AIzaSyBf3z-MGOxfVadj9FWvQ_mFzH44vL8auhw",
+	authDomain: "pr4-3-9c1e2.firebaseapp.com",
+	databaseURL: "https://pr4-3-9c1e2-default-rtdb.europe-west1.firebasedatabase.app",
+	projectId: "pr4-3-9c1e2",
+	storageBucket: "pr4-3-9c1e2.firebasestorage.app",
+	messagingSenderId: "6853118034",
+	appId: "1:6853118034:web:f27597c75bf296e92e778b"
+
+  };
+  
+  const getData = () => {
+	formAnswers.textContent = 'LOAD';
+	
+	nextButton.classList.add('d-none');
+	prevButton.classList.add('d-none');
+	setTimeout(() => {
+		app.database().ref().child('questions').once('value')
+			.then(snap => playTest(snap.val()))
+	}, 500)
+  }
 
   btnOpenModal.addEventListener('click', () => {
     modalBlock.classList.add('d-block');
-    playTest();
   });
 
   closeModal.addEventListener('click', () => {
@@ -116,37 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     const renderQuestion = (indexQuestion) => {
 		formAnswers.innerHTML = '';
-		
-		/*if(numberQuestion >= 0 && numberQuestion <= questions.length - 1){
-			questionTitle.textContent = `${questions[indexQuestion].question}`;
-			renderAnswers(indexQuestion);
-			nextButton.classList.remove('d-none');
-			prevButton.classList.remove('d-none');
-			sendButton.classList.add('d-none');
-		}
-		
-		if (numberQuestion === 0) {
-			prevButton.classList.add('d-none');
-		}
-		
-		if (numberQuestion === questions.length) {
-			nextButton.classList.add('d-none');
-			prevButton.classList.add('d-none');
-			sendButton.classList.remove('d-none');
-			formAnswers.innerHTML = `
-			<div class="form-group">
-			<label for="numberPhone">Enter your number</label>
-			<input type="phone" class="form-control" id="numberPhone">
-			</div>
-			`;
-		}
-		
-		if (numberQuestion === questions.length + 1) {
-			formAnswers.textContent = 'Спасибо за пройденый тест!';
-			setTimeout(() => {
-				modalBlock.classList.remove('d-block');
-			}, 2000);
-		}*/
 		
 		switch(numberQuestion) {
 			case 0:
@@ -216,8 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		checkAnswer();
 		numberQuestion++;
 		renderQuestion(numberQuestion);
-		
-		console.log(finalAnswers);
+		firebase
+			.database()
+			.ref()
+			.child('contacts')
+			.push(finalAnswers)
 	}
   };
 });
